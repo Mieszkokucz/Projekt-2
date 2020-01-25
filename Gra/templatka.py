@@ -91,6 +91,7 @@ if __name__ == "__main__":
     RED       = (255,  0 ,  0 )
     DARK_GREEN = ( 0 , 200,  0 )
     GREEN     = ( 0 , 255,  0 )
+    BLUE = (0, 0, 255)
 
     COOKIE_MAX_SIZE = 50
     COOKIE_MIN_SIZE = 20
@@ -103,6 +104,8 @@ if __name__ == "__main__":
     MISSILE_SPEED = 10
     PLAYER_SPEED = 5
     INVULN_TIME = 3
+
+    Auto = False
 
     pygame.init()
 
@@ -149,16 +152,21 @@ if __name__ == "__main__":
             self.missiles = []
 
         def update(self):
-            self.speed = 0
 
             keyPress = pygame.key.get_pressed()
+            if Auto == False:
+                self.speed = 0
+                if keyPress[K_LEFT]:
+                    self.speed = -PLAYER_SPEED
+                if keyPress[K_RIGHT]:
+                    self.speed = PLAYER_SPEED
+                self.rect.x += self.speed
+            else:
+                self.speed = 5
+                if self.rect.x > 425:
+                    self.speed = -400
+                self.rect.x += self.speed
 
-            if keyPress[K_LEFT]:
-                self.speed = -PLAYER_SPEED
-            if keyPress[K_RIGHT]:
-                self.speed = PLAYER_SPEED
-
-            self.rect.x += self.speed
 
             for missile in self.missiles:
                 missile.rect.y -= MISSILE_SPEED
@@ -188,6 +196,11 @@ if __name__ == "__main__":
             pygame.display.quit()
             pygame.quit()
             sys.exit()
+
+        def zmiana(self):
+            global Auto
+            Auto = True
+            return Auto
 
         def new_game(self):
             self.player = Player()
@@ -345,11 +358,10 @@ if __name__ == "__main__":
                             self.terminate()
 
                 button(self.WINDOW, 'PLAY', WINDOW_WIDTH / 2 - 200, (WINDOW_HEIGHT / 4) * 3, 100, 50, DARK_GREEN, GREEN, self.start)
-                button(self.WINDOW, 'QUIT', WINDOW_WIDTH / 2 + 100, (WINDOW_HEIGHT / 4) * 3, 100, 50, DARK_RED, RED, self.terminate)
+                button(self.WINDOW, 'automatic movement', WINDOW_WIDTH / 2 + 50, (WINDOW_HEIGHT / 4) * 3, 175, 50, BLUE, RED, self.zmiana)
 
                 pygame.display.update()
                 self.CLOCK.tick(15)
-
 
 
         def game_over_screen(self):
