@@ -97,8 +97,8 @@ if __name__ == "__main__":
     COOKIE_MIN_SIZE = 20
     COOKIE_MAX_SPEED_X = 2
     COOKIE_MIN_SPEED_X = -2
-    COOKIE_MAX_SPEED_Y = 6
-    COOKIE_MIN_SPEED_Y = 4
+    COOKIE_MAX_SPEED_Y = 3
+    COOKIE_MIN_SPEED_Y = 2
     COOKIE_NUM = 6
 
     MISSILE_SPEED = 10
@@ -205,7 +205,7 @@ if __name__ == "__main__":
         def new_game(self):
             self.player = Player()
 
-            self.lives = 3
+            self.lives = 8
             self.score = 0
             self.frames = 0
             self.time = [0, 0]
@@ -229,6 +229,30 @@ if __name__ == "__main__":
                 self.CLOCK.tick(self.FPS)
 
         def events(self):
+            if blink.value == 1:
+                print('BLINK!')
+                if self.score < 1000:
+                    self.player.missiles.append(Missle(self.player))
+                    self.player.missiles[len(self.player.missiles) - 1].rect.center = self.player.rect.center
+                elif self.score >= 1000 and self.score < 5000:
+                    self.player.missiles.append(Missle(self.player))
+                    self.player.missiles[len(self.player.missiles) - 1].rect.midleft = (self.player.rect.midleft[0] + 5,
+                                                                                      self.player.rect.midleft[1])
+                    self.player.missiles.append(Missle(self.player))
+                    self.player.missiles[len(self.player.missiles) - 1].rect.midright = (self.player.rect.midright[0] - 5,
+                                                                                      self.player.rect.midright[1])
+                else:
+                    self.player.missiles.append(Missle(self.player))
+                    self.player.missiles[len(self.player.missiles) - 1].rect.midleft = (self.player.rect.midleft[0] + 5,
+                                                                                      self.player.rect.midleft[1])
+                    self.player.missiles.append(Missle(self.player))
+                    self.player.missiles[len(self.player.missiles) - 1].rect.midright = (self.player.rect.midright[0] - 5,
+                                                                                      self.player.rect.midright[1])
+                    self.player.missiles.append(Missle(self.player))
+                    self.player.missiles[len(self.player.missiles) - 1].rect.center = (self.player.rect.center[0],
+                                                                                     self.player.rect.center[1] - 7)
+
+                blink.value = 0
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.terminate()
@@ -236,30 +260,7 @@ if __name__ == "__main__":
                 if event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
                         self.terminate()
-                if blink.value == 1:
-                    print('BLINK!')
-                    if self.score < 1000:
-                        self.player.missiles.append(Missle(self.player))
-                        self.player.missiles[len(self.player.missiles) - 1].rect.center = self.player.rect.center
-                    elif self.score >= 1000 and self.score < 5000:
-                        self.player.missiles.append(Missle(self.player))
-                        self.player.missiles[len(self.player.missiles) - 1].rect.midleft = (self.player.rect.midleft[0] + 5,
-                                                                                          self.player.rect.midleft[1])
-                        self.player.missiles.append(Missle(self.player))
-                        self.player.missiles[len(self.player.missiles) - 1].rect.midright = (self.player.rect.midright[0] - 5,
-                                                                                          self.player.rect.midright[1])
-                    else:
-                        self.player.missiles.append(Missle(self.player))
-                        self.player.missiles[len(self.player.missiles) - 1].rect.midleft = (self.player.rect.midleft[0] + 5,
-                                                                                          self.player.rect.midleft[1])
-                        self.player.missiles.append(Missle(self.player))
-                        self.player.missiles[len(self.player.missiles) - 1].rect.midright = (self.player.rect.midright[0] - 5,
-                                                                                          self.player.rect.midright[1])
-                        self.player.missiles.append(Missle(self.player))
-                        self.player.missiles[len(self.player.missiles) - 1].rect.center = (self.player.rect.center[0],
-                                                                                         self.player.rect.center[1] - 7)
 
-                    blink.value = 0
 
 
 
